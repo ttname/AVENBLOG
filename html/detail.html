@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{article.title}} | {% endblock %}
+{% block content %}
+<article id="post-hack-in-localstorage" class="article article-type-post" itemscope itemprop="blogPost">
+
+    <div class="article-meta">
+      <a href="/{{ article.id }}" class="article-date">
+  	<time datetime="{{ article.update_time }}" itemprop="datePublished">{{ article.update_time|date:"M d" }}</time>
+</a>
+    </div>
+  <div class="article-inner">
+      <input type="hidden" class="isFancy" />
+      <header class="article-header">
+    <h1 class="article-title" itemprop="name">
+     {{ object.article.title }}
+    </h1>
+      </header>
+      <div class="article-info article-info-post">
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list">
+            {% for tag in article.tags_list %}
+            <li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/{{ tag }}">{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+	</div>
+        <div class="clearfix"></div>
+      </div>
+    <div class="article-entry" itemprop="articleBody">
+        {{ article.body|safe }}
+    </div>
+  </div>
+<nav id="article-nav">
+   {% if article.prev_post %}
+            <a href="/post{{ article.prev_post.get_absolute_url }}" id="article-nav-newer" class="article-nav-link-wrap">
+                <strong class="article-nav-caption"><</strong>
+                <div class="article-nav-title">
+                {{ article.prev_post.title }}
+                </div>
+            </a>
+        {% endif %}
+        {% if article.next_post %}
+            <a href="/post{{ article.next_post.get_absolute_url }}" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">></strong>
+                <div class="article-nav-title">{{ article.next_post.title }}
+                    </div>
+            </a>
+        {% endif %}
+</nav>
+</article>
+<div class="duoshuo">
+{% load duoshuo_tags %}
+{% duoshuo_comments %}
+</div>
+{% endblock %}

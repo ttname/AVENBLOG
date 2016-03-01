@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load mytags %}
+{% if title %}
+    {% block title %}{{ title }} {% endblock %}
+{% endif %}
+
+{% block content %}
+    {% for post in article_list %}
+      <article id="post-hack-in-localstorage" class="article article-type-post" itemscope itemprop="blogPost">
+          <div class="article-meta">
+            <a href="/post/{{ post.id }}/" class="article-date">
+  	        <time datetime="{{ post.update_time}}" itemprop="datePublished">{{ post.update_time|date:"M d" }}</time>
+            </a>
+    </div>
+  <div class="article-inner">
+      <input type="hidden" class="isFancy" />
+      <header class="article-header">
+        <h1 itemprop="name">
+        <a class="article-title" href="/post/{{ post.id }}/">{{ post.title }}</a>
+        </h1>
+      </header>
+    <div class="article-entry" itemprop="articleBody">
+       {{ post.body|safe|truncatewords_html:80 }} </div>
+    <div class="article-info article-info-index">
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list">           {% for tag in post.tags_list %}
+            <li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/{{ tag }}">{{ tag }}</a></li>
+            {% endfor %}</ul>
+	</div>
+        <p class="article-more-link">
+          <a  href="/2015/07/06/hack-in-localstorage/#more">more >></a>
+        </p>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+    {% endfor %}
+    <nav id="page-nav">
+        {% if article_list.has_previous %}
+            <a class="extend prev" rel="prev" href="?page={{ article_list.previous_page_number }}">&laquo; Prev</a>
+        {% endif%}
+    {% for i in article_list.paginator.num_pages|do_list %}
+        {% if i == article_list.number  %}
+              <span class="page-number current"> {{ article_list.number }}</span>
+        {% else %} <a href="?page={{ i }}" class="page-number" >{{i}}</a>
+        {% endif %}
+    {% endfor %}
+
+        {% if article_list.has_next %}
+            <a class="extend next" rel="next" href="?page={{ article_list.next_page_number }}">Next &raquo;</a>
+        {% endif%}
+    </nav>
+{% endblock %}
